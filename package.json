@@ -1,14 +1,22 @@
 {
   "name": "json-to-env",
   "version": "1.0.0",
-  "description": "package to convert JSON to env variables",
+  "description": "A utility to convert JSON objects to environment variables",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "example": "node dist/example.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/neenus/json-to-env.git"
+  },
   "keywords": [
+    "json",
+    "env",
+    "environment-variables",
+    "typescript",
     "json-to-env"
   ],
   "author": "Neenus Gabriel",
