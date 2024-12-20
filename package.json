@@ -1,5 +1,5 @@
 {
-  "name": "json-to-env",
+  "name": "jsontoenv",
   "version": "1.0.0",
   "description": "A utility to convert JSON objects to environment variables",
   "main": "dist/index.js",
