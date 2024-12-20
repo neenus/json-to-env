@@ -2,15 +2,18 @@
   "name": "json-to-env",
   "version": "1.0.0",
   "description": "package to convert JSON to env variables",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "example": "node dist/example.js"
   },
   "keywords": [
     "json-to-env"
   ],
   "author": "Neenus Gabriel",
   "license": "MIT",
+  "dependencies": {},
   "devDependencies": {
     "@types/node": "^22.10.2",
     "typescript": "^5.7.2"
