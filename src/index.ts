@@ -13,6 +13,11 @@ type JsonValue = string | number | boolean | null | JsonObject;
 function jsonToEnv(json: JsonObject, options: JsonToEnvOptions = {}): Record<string, string> {
   const { prefix = '' } = options;
 
+  // Check if the input is a valid JSON object
+  if (typeof json !== 'object' || json === null || Array.isArray(json)) {
+    throw new Error('Invalid input: Only JSON objects are supported.');
+  }
+
   // Recursive function to flatten nested JSON
   const flatten = (obj: JsonObject, parentKey = ''): Record<string, string> => {
     const result: Record<string, string> = {};
