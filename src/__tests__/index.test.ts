@@ -1,5 +1,5 @@
 const { test: jestTest, expect: jestExpect } = require('@jest/globals');
-import jsonToEnv from "../index";
+import { jsonToEnv } from "../index";
 
 describe("jsonToEnv", () => {
   it("should correctly convert a JSON object to environment variables", () => {

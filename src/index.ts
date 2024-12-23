@@ -10,7 +10,7 @@ interface JsonObject {
 
 type JsonValue = string | number | boolean | null | JsonObject;
 
-function jsonToEnv(json: JsonObject, options: JsonToEnvOptions = {}): Record<string, string> {
+const jsonToEnv = (json: JsonObject, options: JsonToEnvOptions = {}): Record<string, string> => {
   const { prefix = '' } = options;
 
   // Check if the input is a valid JSON object
@@ -56,4 +56,4 @@ function jsonToEnv(json: JsonObject, options: JsonToEnvOptions = {}): Record<str
   return envVars;
 }
 
-export default jsonToEnv;
+export { jsonToEnv };

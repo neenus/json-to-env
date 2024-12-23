@@ -1,4 +1,4 @@
-import jsonToEnv from './index';
+import { jsonToEnv } from './index';
 
 const config = {
   database: {
