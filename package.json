@@ -1,6 +1,6 @@
 {
   "name": "json-to-env-converter",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A utility to converts JSON objects to environment variables",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
