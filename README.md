@@ -20,7 +20,7 @@ npm install json-to-env-converter
 
 ### **Basic Example**
 ```typescript
-import jsonToEnv from 'json-to-env-converter';
+import { jsonToEnv } from 'json-to-env-converter';
 
 const config = {
   database: {
@@ -43,7 +43,7 @@ console.log(result); // Output: { DATABASE_HOST: 'localhost', DATABASE_PORT: '54
 You can add a custom prefix to the environment variable names:
 
 ```typescript
-import jsonToEnv from 'json-to-env-converter';
+import { jsonToEnv } from 'json-to-env-converter';
 
 const config = {
   api: {
@@ -65,7 +65,7 @@ console.log(result); // Output: { APP_API_KEY: 'my-api-key', APP_API_SECRET: 'my
 The package automatically flattens nested objects into uppercase environment variables:
 
 ```typescript
-import jsonToEnv from 'json-to-env-converter';
+import { jsonToEnv } from 'json-to-env-converter';
 
 const config = {
   app: {
@@ -94,7 +94,7 @@ console.log(process.env.APP_DATABASE_PORT); // Output: '3306'
 If the input JSON is invalid, the function throws an error:
 
 ```typescript
-import jsonToEnv from 'json-to-env-converter';
+import { jsonToEnv } from 'json-to-env-converter';
 
 try {
   jsonToEnv([]);
