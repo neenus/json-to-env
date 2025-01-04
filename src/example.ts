@@ -13,7 +13,7 @@ const config = {
 };
 
 // Convert JSON to environment variables
-jsonToEnv(config, { prefix: 'APP_' });
+jsonToEnv(config, { prefix: 'APP_', envFile: true, envFileName: '.env.local', envFilePath: './src' });
 
 // Access environment variables
 console.log(process.env.APP_DATABASE_HOST); // "localhost"
