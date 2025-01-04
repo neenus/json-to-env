@@ -2,7 +2,7 @@
 
 A utility to convert JSON objects into environment variables.
 
-This tool will flatten the JSON object and convert it into uppercase environment variables, setting the values in the `process.env` object and create a .env file in the root directory.
+This tool will flatten the JSON object and convert it into uppercase environment variables, setting the values in the `process.env` object and optionally creating a `.env` file.
 
 ---
 
@@ -82,10 +82,44 @@ const config = {
 
 jsonToEnv(config);
 
-console.log(process.env.APP_NAME);          // Output: 'json-to-env'
-console.log(process.env.APP_VERSION);       // Output: '1.0.0'
 console.log(process.env.APP_DATABASE_HOST); // Output: 'db-host'
 console.log(process.env.APP_DATABASE_PORT); // Output: '3306'
+console.log(process.env.APP_API_KEY); // Output: 'my-api-key'
+console.log(process.env.APP_API_SECRET); // Output: 'my-secret-key'
+```
+
+---
+
+### **Available Options**
+The `jsonToEnv` function accepts an optional options object with the following properties:
+
+- `prefix`: A string to add a prefix to the environment variable names (default: `''`).
+- `envFile`: A boolean to enable or disable the creation of the `.env` file (default: `false`); if enabled and the file already exists, it will be overwritten.
+- `envFileName`: A string to specify the name of the `.env` file (default: `.env`).
+- `envFilePath`: A string to specify the path where the `.env` file should be created (default: `.`).
+
+```typescript
+import { jsonToEnv } from 'json-to-env-converter';
+
+const config = {
+  database: {
+    host: 'localhost',
+    port: 5432,
+  },
+  api: {
+    key: 'my-api-key',
+    retries: 3,
+  },
+  enableFeatureX: true,
+};
+
+// Convert JSON to environment variables and create a .env file
+jsonToEnv(config, { prefix: 'APP_', envFile: true, envFileName: '.env.local', envFilePath: './src' });
+
+console.log(process.env.APP_DATABASE_HOST); // "localhost"
+console.log(process.env.APP_DATABASE_PORT); // "5432"
+console.log(process.env.APP_API_KEY); // "my-api-key"
+console.log(process.env.APP_ENABLEFEATUREX); // "true"
 ```
 
 ---
