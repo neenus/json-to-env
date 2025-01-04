@@ -2,6 +2,9 @@ import fs from 'fs';
 
 interface JsonToEnvOptions {
   prefix?: string;
+  envFile?: boolean;
+  envFileName?: string;
+  envFilePath?: string;
 };
 
 interface JsonObject {
@@ -46,12 +49,21 @@ const jsonToEnv = (json: JsonObject, options: JsonToEnvOptions = {}): Record<str
     envVars[envKey] = value;
   });
 
-  // write to .env file
+  // write to .env file if specified
+  if (!options.envFile) return envVars;
   const envContent = Object.entries(envVars)
     .map(([key, value]) => `${key}=${value}`)
     .join('\n');
 
-  fs.writeFileSync('.env', envContent, { "flag": "w" });
+  const envFileName = options.envFileName || '.env';
+  const envFilePath = options.envFilePath || '.';
+
+  // check if filePath exists; if not, create it
+  if (!fs.existsSync(envFilePath)) {
+    fs.mkdirSync(envFilePath);
+  }
+
+  fs.writeFileSync(`${envFilePath}/${envFileName}`, envContent, { "flag": "w" });
 
   return envVars;
 }
