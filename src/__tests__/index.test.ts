@@ -1,14 +1,25 @@
 const { test: jestTest, expect: jestExpect } = require('@jest/globals');
 import { jsonToEnv } from "../index";
 
+// setup clean function to remove the .env file if it exists before each test
+beforeEach(() => {
+  const fs = require("fs");
+  const path = require("path");
+  const envFilePath = path.resolve(process.cwd(), ".env");
+  if (fs.existsSync(envFilePath)) {
+    fs.unlinkSync(envFilePath);
+  }
+});
+
+let config = {
+  database: {
+    host: "localhost",
+    port: 5432,
+  },
+}
+
 describe("jsonToEnv", () => {
   it("should correctly convert a JSON object to environment variables", () => {
-    const config = {
-      database: {
-        host: "localhost",
-        port: 5432,
-      },
-    };
 
     const result = jsonToEnv(config);
 
@@ -21,21 +32,18 @@ describe("jsonToEnv", () => {
   });
 
   it("should apply a prefix to the environment variables if specified", () => {
-    const config = {
-      api: {
-        key: "my-api-key",
-      },
-    };
 
     const result = jsonToEnv(config, { prefix: "APP_" });
-    expect(process.env.APP_API_KEY).toBe("my-api-key");
+
+    expect(process.env.APP_DATABASE_HOST).toBe("localhost");
     expect(result).toStrictEqual({
-      APP_API_KEY: "my-api-key",
+      APP_DATABASE_HOST: "localhost",
+      APP_DATABASE_PORT: "5432",
     });
   });
 
   it("should correctly handle nested objects", () => {
-    const config = {
+    const nestedConfig = {
       database: {
         host: "localhost",
         port: 5432,
@@ -46,7 +54,7 @@ describe("jsonToEnv", () => {
       },
     };
 
-    const result = jsonToEnv(config);
+    const result = jsonToEnv(nestedConfig);
 
     expect(process.env.DATABASE_HOST).toBe("localhost");
     expect(process.env.DATABASE_PORT).toBe("5432");
@@ -61,13 +69,13 @@ describe("jsonToEnv", () => {
   });
 
   it("should correctly handle arrays", () => {
-    const config = {
+    const arrayConfig = {
       database: {
         hosts: ["localhost", "http://localhost"],
       },
     };
 
-    const result = jsonToEnv(config);
+    const result = jsonToEnv(arrayConfig);
 
     expect(process.env.DATABASE_HOSTS).toBe("localhost,http://localhost");
     expect(result).toStrictEqual({
@@ -75,13 +83,7 @@ describe("jsonToEnv", () => {
     });
   });
 
-  it("should create a .env file", () => {
-    const config = {
-      database: {
-        host: "localhost",
-        port: 5432,
-      },
-    };
+  it("should not create an .env file by default", () => {
 
     const result = jsonToEnv(config);
 
@@ -89,21 +91,22 @@ describe("jsonToEnv", () => {
     const fs = require("fs");
     const path = require("path");
     const envFilePath = path.resolve(process.cwd(), ".env");
+    expect(fs.existsSync(envFilePath)).toBe(false);
+  });
+
+  it("should create a .env file if enfFile option is true", () => {
+
+    const result = jsonToEnv(config, { envFile: true });
+
+    const fs = require("fs");
+    const path = require("path");
+    const envFilePath = path.resolve(process.cwd(), ".env");
     expect(fs.existsSync(envFilePath)).toBe(true);
   });
 
   it("should create a .env file with the environment variables with valid contents", () => {
-    const config = {
-      database: {
-        host: "localhost",
-        port: 5432,
-      },
-      api: {
-        key: "my-api-key",
-      }
-    };
 
-    const result = jsonToEnv(config);
+    const result = jsonToEnv(config, { envFile: true });
 
     // check if the .env file was created
     const fs = require("fs");
@@ -114,6 +117,16 @@ describe("jsonToEnv", () => {
     // check the contents of the .env file
     const envFileContents = fs.readFileSync(envFilePath, "utf8");
     console.log(`.env file contents:\n${envFileContents}`);
-    expect(envFileContents).toBe("DATABASE_HOST=localhost\nDATABASE_PORT=5432\nAPI_KEY=my-api-key");
+    expect(envFileContents).toBe("DATABASE_HOST=localhost\nDATABASE_PORT=5432");
+  });
+
+  it("should create a .env file with the specified name and path", () => {
+
+    const result = jsonToEnv(config, { envFile: true, envFileName: ".env.local", envFilePath: "./src" });
+
+    const fs = require("fs");
+    const path = require("path");
+    const envFilePath = path.resolve(process.cwd(), "src/.env.local");
+    expect(fs.existsSync(envFilePath)).toBe(true);
   });
 });
