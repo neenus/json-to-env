@@ -1,12 +1,13 @@
 {
   "name": "json-to-env-converter",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A utility to converts JSON objects to environment variables",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "example": "node dist/example.js"
+    "example": "node dist/example.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
